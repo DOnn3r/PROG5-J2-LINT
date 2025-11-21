@@ -1,0 +1,36 @@
+name: CI Python Quality Check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  quality_check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11' 
+
+    - name: Install dependencies (Linters and Test tools)
+      run: |
+        pip install flake8 black pytest
+
+    - name: Run Flake8 (Linting)
+      run: |
+        flake8 .
+        
+    - name: Run Black (Check Formatting)
+      run: |
+        black . --check
+        
+    - name: Run Pytest (Unit Tests)
+      run: |
+        pytest
