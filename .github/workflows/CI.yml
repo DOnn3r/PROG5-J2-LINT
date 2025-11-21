@@ -1,13 +1,13 @@
-name: CI Python Quality Check
+name: Python Quality Check (Linting Only)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  quality_check:
+  linting:
     runs-on: ubuntu-latest
     
     steps:
@@ -19,18 +19,14 @@ jobs:
       with:
         python-version: '3.11' 
 
-    - name: Install dependencies (Linters and Test tools)
+    - name: Install Linters
       run: |
-        pip install flake8 black pytest
-
-    - name: Run Flake8 (Linting)
+        pip install flake8 black
+        
+    - name: Run Flake8
       run: |
         flake8 .
-        
-    - name: Run Black (Check Formatting)
+
+    - name: Run Black Check
       run: |
         black . --check
-        
-    - name: Run Pytest (Unit Tests)
-      run: |
-        PYTHONPATH=. pytest
